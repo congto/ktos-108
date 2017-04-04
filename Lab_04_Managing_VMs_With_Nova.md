@@ -31,7 +31,7 @@ openstack server
 ```
 
 - boot instance (ephemeral), log in and create a file on the file system.
- Example template: 
+ Example template:
  ```
  cat > original.txt <<EOF
  this is a file
@@ -46,6 +46,7 @@ openstack server
 - export snapshot (glance function)
 - import snapshot as new image
 - boot instance from new image
+- verify that your file is in the latest VM
 
 ## VM size manipulation
 
@@ -54,8 +55,10 @@ openstack server resize
 ```
 
 - select the next larger flavor, resize the image to this (tiny->small)
+ - don't have a next larger flavor?  Create one, with more disk, ram, cores
 - can you resize the other way?
   why, or why-not
+
 
 ## VM Network service
 While we'll look at Neutron next, there are still some common operations even if we just use the "generic" network model.  Specifically, FloatingIP allocation and association that is more commonly handled via nova.
@@ -64,7 +67,7 @@ While we'll look at Neutron next, there are still some common operations even if
 openstack server ip floating
 ```
 
-- assoicate a floating IP with the instnace
+- associate a floating IP with the instance
 - from the VM (ssh or console into your OpenStack instance) log in to the deployed VM via the floating IP
 
 In order to look at one of the other common operations, create another private network and turn on a VM via the command line
@@ -77,6 +80,7 @@ In order to look at one of the other common operations, create another private n
 - If the scheduler isn't "saying" much, enable debugging (from the container review)
 
 ### Extra Extra Credit
+If you don't have a working Cinder environment, do the following, otherwise, skip ahead to the creation of a volume:
 - rebuild your environment to enable cinder:
   - on the openstack system VM:  ```echo 'enable_cinder: "yes"' > /etc/kolla/globals.yml``` and then delete and re-build the openstck enviornment:
 
@@ -86,7 +90,8 @@ echo 'enable_cinder: "yes"' >> /etc/kolla/globals.yml
 kolla-ansible destroy -i multinode --yes-i-really-really-mean-it
 kolla-ansible deploy -i multinode
 ```
-- now create a volume from an image and boot from that volume
+In either case:
+- create a volume from an image and boot from that volume
 - boot an instance and ask the system to create a volume for the system's root
 - "backup" the instance
 - restore the "backup"

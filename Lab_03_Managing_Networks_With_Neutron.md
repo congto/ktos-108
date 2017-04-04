@@ -6,7 +6,7 @@ The networking functionality can really be broken down into a few key aspects:
 3) L3 based security
 
 There are a number of additional service functions that we will not necessarily have time to review in the lab:
-- lbaas, Load Balancing service, although an extra credit is to try to deploy this
+- lbaas, Load Balancing service, although an extra credit is to try to deploy this (requires re-building the neutron-server container! mega-extra credit!)
 - fwaas, vpnaas
 
 ## Create, Delete L2 segments
@@ -32,7 +32,7 @@ openstack subnet
   - ca you reach other instances?
 ### Extra Credit
   - select a specific IP address (from the subnet range) for your instance on boot
-  - modify the network, ad a DNS server (8.8.8.8)
+  - modify the network, add a DNS server (8.8.8.8)
 
 ```
 openstack router
@@ -51,9 +51,10 @@ openstack security group
 ```
 
 - Review the "default" group parameters
-- Create a new security group, and allow inbound ICMP messages, and TCP on port 22
+- Create a new security group, and allow inbound ICMP messages from any destination (0.0.0.0/0)
 - Associate the security group with both of the running VMs
-  - can you now ping between the entities
+  - can you now ping between the entities?
+
 
 ## Extra Credit
 - what do you need to do to access the other systems?

@@ -1,6 +1,6 @@
 # Docker use Basics
 
-We have two choices for using Docker int he lab enviornment(s):
+We have two choices for using Docker in the lab enviornment(s):
 
 1) Use our control or node-1 machine, which already have docker installed
 2) Use the "native" Docker service from Docker.com:
@@ -8,7 +8,7 @@ We have two choices for using Docker int he lab enviornment(s):
 https://www.docker.com/products/docker
 ```
 
-Caution: You will want to run the rest of this lab from within this Vagrant VM. If you have the lastest version of Docker installed on you laptop, the lab will still work, but note that the specified paths and IP addresses will differ in some cases.
+Caution: You will want to run the rest of this lab from within the Vagrant VM or your Lab environment. If you have the lastest version of Docker installed on you laptop, the lab will still work, but note that the specified paths and IP addresses will differ in some cases.
 
 In either case, we should first validate that we can even talk to the docker daemon:
 ```
@@ -46,7 +46,7 @@ docker run --rm -p 8000:8000 -i -t alpine:latest sh
 ```
 
 New parameter:
--p expose port 8000 to the system
+'-p' expose port 8000 to the system
 
 We can, in the interpreter, add a set of additional resources, like a python interpreter. And we can create files, and run applications.
 ```
@@ -54,7 +54,7 @@ apk update && apk add python3
 echo "Hello World!" > index.html
 python3 -m http.server 8000
 ```
-open a browser on your local machine and point it to http://192.168.56.10:8000 (or http://localhost:8000 on your laptop)
+open a browser on your local machine and point it to http://192.168.56.10:8000 (or http://localhost:8000 on your laptop) or to the public IP or domain name of the machine running Docker (controller or compute node)
 
 3) Let's get our web pages from the local system disk rather than creating it
 First, create a file to serve in the local directory with a new comment, such as:

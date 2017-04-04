@@ -12,27 +12,12 @@ Before we can do much of anything we need to have the command line tools install
 pip install python-openstackclient
 ```
 
-We also need to have a set of credentials set up in order to help map to the OpenStack environment:
+We also need to have a set of credentials set up in order to help map to the OpenStack environment. If there isn't already an openrc.sh or open.rc script in the /root directory, you can create one:
 
 ```
 cat > ~/openrc.sh << EOF
 #!/bin/bash
 
-# set environment variables for Starmer's OpenStack demo install
-
-# "source this file, don't subshell" predicate inspired by
-# http://stackoverflow.com/a/23009039/282912
-
-if [ "$0" = "$BASH_SOURCE" ] ; then
-    echo "You ran this script instead of sourcing it."
-    echo "  usage: source $0"
-    echo "Aborting."
-    exit 1
-else
-    echo "Setting environment variables in the current shell"
-fi
-
-set -o xtrace
 export OS_PROJECT_DOMAIN_ID=default
 export OS_USER_DOMAIN_ID=default
 export OS_PROJECT_NAME=admin
@@ -41,12 +26,11 @@ export OS_USERNAME=admin
 export OS_PASSWORD=$(cat /etc/kolla/passwords.yml | grep "keystone_admin_password" | awk '{print $2}')
 export OS_AUTH_URL=http://$(hostname):35357/v3
 export OS_IDENTITY_API_VERSION=3
-set +o xtrace
 EOF
 
 ```
 
-Copy and paste the above into the command line on your "ALL-IN-ONE" instance, and then source the resulting "openrc.sh" script:
+Copy and paste the above into the command line on your "control" instance, and then source the resulting "openrc.sh" script:
 
 ```
 source openrc.sh
@@ -73,6 +57,8 @@ openstack roles
 - create a new role 'serious'
   - how do you make this role "meaningful"
 - associate the new role with the admin user and admin project
+
+Hint: where might one find a policy.json file and modify it's contents?
 
 ```
 openstack domain

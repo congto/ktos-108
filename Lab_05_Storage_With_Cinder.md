@@ -1,9 +1,11 @@
 # OpenStack Block Storage - cinder
 
-For Cinder, we will have to enable additional servcies and re-build our OpenStack enviornment.
+For Cinder, we will have to enable additional services and re-build our OpenStack environment.
+
+If you don't have a cinder capable environment:
 
 1) Delete any running VMs (they need to go away to allow us to re-create the containers)
-2) We will also loose our image and networks, so the network and image scripts can re-create them quickly.
+2) We will also lose our image and networks, so the network and image scripts can re-create them quickly.
 
 ```
 echo 'enable_cinder: "yes"' >> /etc/kolla/globals.yml
@@ -12,9 +14,14 @@ kolla-ansible destroy -i multinode --yes-i-really-really-mean-it
 kolla-ansible deploy -i multinode
 ```
 
-Once that's done, we can start creating Volumes, though it's possible you did this via the earlier Nova Extra Credit.
+Once that's done, we can start creating Volumes, though it's possible you did this via the earlier Nova Extra Credit, or that this was already done at the beginning of class.
 
 - create a volume and associate it with a running VM
+
+```
+openstack volume ....
+```
+
 - log in to the VM, and create a file system on it:
 
 ```

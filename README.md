@@ -11,6 +11,8 @@ Deploy a test OpenStack System if one hasn't been provided for you already.
  - Leverage Docker/Kolla environment
  - use either the Vagrant script or leverage the ansible deployment "initialize.yml" script.
 
+A useful Vagrant or "terraform" deployed OpenStack system is available at https://github.com/kumulustech/kolla-multinode
+
 Configure the User environment and Access an OpenStack System
  - Horizon Web UI
  - CLI

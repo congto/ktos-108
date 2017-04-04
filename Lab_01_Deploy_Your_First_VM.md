@@ -10,10 +10,12 @@ We've deployed a simple CirrOS based VM and our first task will be to find a way
 
 We should be able to leverage any of these solutions from our laptop against the currently running system, and we'll start with the 'easy' path and leverage the Horizon web user interface. Find the VM we spun up in the first lab in horizon (login with the credentials from the open.rc file, or user: admin, password: admin1).
 
-Horizon should be available at http://192.168.56.10 or control{student#}.cloudsushi.io, command line access is available via ssh to the same node as "root" user:
+Horizon should be available at http://192.168.56.10 (virtualbox deployment) or control{student#}.cloudsushi.io (class system), command line access is available via ssh to the same node as "root" user:
 
 ```
 ssh root@control{student#}.cloudsushi.io
+or
+ssh root@192.168.56.10
 ```
 
 Select select the VM from the list (under Project=>Compute), and then select our VM (cirros), and then the Console view from the tabs across the top of the page.
@@ -53,16 +55,29 @@ ubuntu
 EOF
 ```
 
+Or, with a CentOS7 image:
+
+```
+#!/bin/bash
+passwd centos << EOF
+centos
+centos
+EOF
+```
+But wait, we don't have a CentOS or Ubuntu image.
+
 Since Cloud-Init is such a critical component of services like OpenStack, we will find that when we deploy a VM via Horizon (and via CLI) that we can pass this script directly as a part of the boot definition. First we'll use the Horizon wizard to launch a VM and in the "User Data" section, add our little script. We'll leverage the Ubuntu cloud image we installed as a part of our deployment process for this deployment.  Create a file (perhaps call it user-data.sh, though the name is not critical, it's just good practice to remember what we are putting in this file).  We'll use this file in the next section as an alternative to the Horizon model for passing cloud data.
 
 Now go to the VNC console, can we get in?
 
-Extra Credit:
+##Extra Credit:
 - Again, leverage the VNC command line to get a direct VNC access link
 - Be a good cloud citizen, delete the VMs from your running environment
 
-#SSH access via public key
-- Look at the output of the ```nova help``` command, and find the floatingIP commands.  Can you use this set of commands to allocate a floating IP to either of our current VMs?  
+###SSH access via public key
+- Look at the output of the ```nova help``` command, and find the floatingIP commands.  Can you use this set of commands to allocate a floating IP to either of our current VMs?
+
+- For even more extra credit, look at ```openstack help server``` and ```openstack help floating``` commands.
 
 Did you already clean up your VMs? Good, more time to practice launching them!
  - launch an ubuntu VM - either include a cloud init script like the one listed above to set a password, and/or include the ssh key_name we uploaded from the previous section.
