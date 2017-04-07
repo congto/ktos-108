@@ -10,7 +10,7 @@ parameters:
   image:
     type: string
     label: Image Name
-    default: ubuntu
+    default: CentOS7
     description: Image to be used for compute instance
   instance_type:
     type: string
