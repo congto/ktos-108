@@ -1,11 +1,15 @@
 # Docker use Basics
 
-We have two choices for using Docker in the lab enviornment(s):
+We have a few choices for using Docker in the lab enviornment(s):
 
-1) Use our control or node-1 machine, which already have docker installed
+1) Use our node-1 machine or 'compute#' machine in the lab enviornments, which already have docker installed
 2) Use the "native" Docker service from Docker.com:
 ```
 https://www.docker.com/products/docker
+```
+3) Deploy docker with Vagrant and Virtualbox:
+```
+https://github.com/kumulustech/vagrant-docker
 ```
 
 Caution: You will want to run the rest of this lab from within the Vagrant VM or your Lab environment. If you have the lastest version of Docker installed on you laptop, the lab will still work, but note that the specified paths and IP addresses will differ in some cases.
@@ -54,7 +58,7 @@ apk update && apk add python3
 echo "Hello World!" > index.html
 python3 -m http.server 8000
 ```
-open a browser on your local machine and point it to http://192.168.56.10:8000 (or http://localhost:8000 on your laptop) or to the public IP or domain name of the machine running Docker (controller or compute node)
+open a browser on your local machine and point it to http://192.168.56.10:8000 (or http://localhost:8000 on your laptop) or to the public IP or domain name of the machine running Docker (or compute node): http://compute{student#}.cloudsushi.io
 
 3) Let's get our web pages from the local system disk rather than creating it
 First, create a file to serve in the local directory with a new comment, such as:
@@ -63,21 +67,21 @@ echo 'Hello Brave New WORLD!' > index.html
 ```
 Then launch our Alpine container again:
 ```
-docker run --rm -p 8000:8000 -v ./:/root -i -t alpine:latest sh
+docker run --rm -p 8000:8000 -v /root:/root -i -t alpine:latest sh
 ```
 ```
 apk update && apk add python3
 cd /root
 python3 -m http.server 8000
 ```
-Again, open a browser on your local machine and point it to http://192.168.56.10:8000 (or http://localhost:8000 on your laptop)
+Again, open a browser on your local machine and point it to http://192.168.56.10:8000 (or http://compute{student#}:8000 if using the class systems)
 
 4) Let's make this all permanent
 Running a container and then modifying it is not the best way to use containers, although we can get an idea of what we have to do to get our code installed properly in the container environment. In fact, it would be better if we could just incorporate our application/service into the image instead.
 
 We will create a Dockerfile with the above commands, and with that description, create an image of our own.
 
-On the docker VM, create a file named Dockerfile in the local directory. You can use a text editor on the VM itself (vi is there by default, or joe editor, which has embedded instructions).
+On the docker VM, create a file named ```Dockerfile``` in the local directory. You can use a text editor on the VM itself (vi is there by default, or joe editor, which has embedded instructions).
 
 ```
 FROM alpine:latest
@@ -112,11 +116,11 @@ For now, we'll leave the name off, and we can once again run our container, but 
 ```
 docker run -d --name hw -p 8000:8000 hello-world:latest
 ```
-Without having to get into the container we should be able point our web browser at http://192.168.56.10:8000/ (or locahost) and get our default Hello World message:
+Without having to get into the container we should be able point our web browser at http://192.168.56.10:8000/ (or http://compute{student#}.cloudsushi.io environment) and get our default Hello World message:
 ```
 Hello World!
 ```
-We can also run 'curl' from the local machine, which should give us the same response on the command line:
+We can also run 'curl' from the docker host machine, which should give us the same response on the command line:
 ```
 curl http://localhost:8000/
 ```
@@ -161,9 +165,9 @@ First stop and remove the previous instance if you haven't already (see the prev
 
 Now, let's launch the container and map a local directory to our container's /root directory (remember that we told our image to use this as the working directory):
 ```
-docker run -d -p 8000:8000 -v ./:/root hello-world:latest
+docker run -d -p 8000:8000 -v /root:/root hello-world:latest
 ```
-What do we get when we now run:
+What do we get when we now run the following curl on the docker host:
 ```
 curl http://localhost:8000
 ```
@@ -172,18 +176,28 @@ curl http://localhost:8000
 
 If we want to further simply the process of starting a container (or a group of associated containers), we can create a compose description that includes the port mapping and volume mappings we would otherwise have to pass on the command line.
 
+On the docker host, we need to install compose:
+
+```
+pip install docker-compose
+```
+
 In the local directory, create a file called docker-compose.yml. Note that as a YAML formatted file, spaces are important, do not use <TAB> to space this file unless you are using a text editor that is configured to convert tabs into spaces.
 ```
 version: '2'
 services:
-hello-world:
-build:
-context: .
-image: hello-world:latest
-ports:
-- "8000:8000"
-volumes:
-- ./:/root
+  hello-world:
+    build: .
+    image: hello-world:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - /root/:/root
+```
+
+We also need to install the docker-compose tool:
+```
+sudo pip install docker-compose
 ```
 
 We can then launch the container (which will also build a new version):
