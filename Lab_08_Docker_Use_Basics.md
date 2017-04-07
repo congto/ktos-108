@@ -179,7 +179,7 @@ If we want to further simply the process of starting a container (or a group of 
 On the docker host, we need to install compose:
 
 ```
-pip install docker-compose
+sudo pip install docker-compose
 ```
 
 In the local directory, create a file called docker-compose.yml. Note that as a YAML formatted file, spaces are important, do not use <TAB> to space this file unless you are using a text editor that is configured to convert tabs into spaces.
@@ -193,11 +193,6 @@ services:
       - "8000:8000"
     volumes:
       - /root/:/root
-```
-
-We also need to install the docker-compose tool:
-```
-sudo pip install docker-compose
 ```
 
 We can then launch the container (which will also build a new version):
